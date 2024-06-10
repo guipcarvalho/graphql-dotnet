@@ -1,0 +1,6 @@
+﻿services:
+  graphql.playground:
+    image: graphql.playground
+    build:
+      context: .
+      dockerfile: Dockerfile
