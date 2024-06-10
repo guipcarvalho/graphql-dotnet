@@ -3,5 +3,5 @@
 
 Migration command
 ```
-dotnet ef migrations add [NAME] --project GraphQL.Playground/ --startup-project GraphQL.Playground --output-dir Data/Migrations
+dotnet ef migrations add AddInitialSchema --project GraphQL.Playground.csproj --output-dir Data/Migrations
 ```
