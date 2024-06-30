@@ -3,9 +3,9 @@ using GraphQL.Types;
 
 namespace GraphQL.Playground.GraphQL;
 
-public class AppSchema : Schema
+public class GraphSchema : Schema
 {
-    public AppSchema(CourseQuery query)
+    public GraphSchema(CourseQuery query)
     {
         Query = query;
     }

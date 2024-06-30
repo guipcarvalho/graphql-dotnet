@@ -3,18 +3,26 @@ using GraphQL.Playground.Data;
 using GraphQL.Playground.GraphQL;
 using GraphQL.Playground.GraphQL.Queries;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<AppSchema>();
+builder.Services.AddScoped<GraphSchema>();
 builder.Services.AddScoped<CourseQuery>();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddGraphQL(opt =>
+builder.Services.AddGraphQL(graphQlBuilder =>
 {
-    opt.AddSystemTextJson();
+    graphQlBuilder
+        .AddSystemTextJson()
+        .AddGraphTypes(typeof(GraphSchema).Assembly)
+        .UseApolloTracing()
+        .ConfigureExecutionOptions(opt =>
+        {
+            opt.EnableMetrics = true;
+        });
 });
 
 var app = builder.Build();
@@ -25,7 +33,7 @@ await context.Database.MigrateAsync();
 
 app.UseHttpsRedirection();
 
-app.UseGraphQL<AppSchema>();
+app.UseGraphQL<GraphSchema>();
 app.UseGraphQLPlayground();
 
 app.Run();
