@@ -24,4 +24,26 @@ public class CourseRepository(ApplicationContext context) : ICourseRepository
         
         return course;
     }
+    
+    public async Task<Course> UpdateCourseAsync(Course course)
+    {
+        course.DateUpdated = DateTime.Now;
+        context.Courses.Update(course);
+        await context.SaveChangesAsync();
+        
+        return course;
+    }
+    
+    public async Task DeleteCourseAsync(int idCourse)
+    {
+        var course = await context.Courses.FirstOrDefaultAsync(c => c.Id == idCourse);
+        
+        if (course is null)
+        {
+            throw new ArgumentException("Course not found.");
+        }
+        
+        context.Courses.Remove(course);
+        await context.SaveChangesAsync();
+    }
 }
