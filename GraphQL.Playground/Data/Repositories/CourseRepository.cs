@@ -8,18 +8,27 @@ public class CourseRepository(ApplicationContext context) : ICourseRepository
 {
     public async Task<IEnumerable<Course>> GetCoursesAsync()
     {
-        return await context.Courses.ToListAsync();
+        return await context.Courses.Include(c => c.Reviews).ToListAsync();
     }
     
     public async Task<Course?> GetCourseByIdAsync(int id)
     {
-        return await context.Courses.FirstOrDefaultAsync(c => c.Id == id);
+        return await context.Courses.Include(c => c.Reviews).FirstOrDefaultAsync(c => c.Id == id);
     }
     
     public async Task<Course> AddCourseAsync(Course course)
     {
         course.DateAdded = DateTime.Now;
         await context.Courses.AddAsync(course);
+        if(course.Reviews is { Count: > 0 })
+        {
+            foreach(var review in course.Reviews)
+            {
+                review.CourseId = course.Id;
+                review.Course = course;
+                context.Reviews.Add(review);
+            }
+        }
         await context.SaveChangesAsync();
         
         return course;

@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace GraphQL.Playground.GraphQL.Types;
 
-public class CourseType : ObjectGraphType<Course>
+public sealed class CourseType : ObjectGraphType<Course>
 {
     public CourseType()
     {
@@ -16,13 +16,13 @@ public class CourseType : ObjectGraphType<Course>
         Field(x => x.Description, type: typeof(StringGraphType))
             .Description("The description of the course.");
         
-        Field(x => x.Review, type: typeof(IntGraphType))
-            .Description("The review of the course.");
-        
         Field(x => x.DateAdded, type: typeof(DateTimeGraphType))
             .Description("The date the course was added.");
         
         Field(x => x.DateUpdated, type: typeof(DateTimeGraphType))
             .Description("The date the course was updated.");
+        
+        Field(x => x.Reviews, type: typeof(ListGraphType<ReviewType>))
+            .Description("The reviews for the course.");
     }
 }

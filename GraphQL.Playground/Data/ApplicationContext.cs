@@ -11,4 +11,5 @@ public class ApplicationContext : DbContext
     }
 
     public DbSet<Course> Courses { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 }

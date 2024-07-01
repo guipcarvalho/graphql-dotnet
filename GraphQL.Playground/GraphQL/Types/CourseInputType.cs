@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace GraphQL.Playground.GraphQL.Types;
 
-public class CourseInputType : InputObjectGraphType<Course>
+public sealed class CourseInputType : InputObjectGraphType<Course>
 {
     public CourseInputType()
     {
@@ -15,7 +15,7 @@ public class CourseInputType : InputObjectGraphType<Course>
         Field(x => x.Description, type: typeof(StringGraphType))
             .Description("The description of the course.");
         
-        Field(x => x.Review, type: typeof(IntGraphType))
-            .Description("The review of the course.");
+        Field(x => x.Reviews, type: typeof(ListGraphType<ReviewInputType>))
+            .Description("The reviews for the course.");
     }
 }
