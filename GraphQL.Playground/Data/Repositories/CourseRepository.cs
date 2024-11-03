@@ -6,14 +6,26 @@ namespace GraphQL.Playground.Data.Repositories;
 
 public class CourseRepository(ApplicationContext context) : ICourseRepository
 {
-    public async Task<IEnumerable<Course>> GetCoursesAsync()
+    public async Task<IEnumerable<Course>> GetCoursesAsync(bool includeReviews = false)
     {
-        return await context.Courses.Include(c => c.Reviews).ToListAsync();
+        return await GetBaseQuery(includeReviews).ToListAsync();
     }
-    
-    public async Task<Course?> GetCourseByIdAsync(int id)
+
+    private IQueryable<Course> GetBaseQuery(bool includeReviews)
     {
-        return await context.Courses.Include(c => c.Reviews).FirstOrDefaultAsync(c => c.Id == id);
+        IQueryable<Course> baseQuery = context.Courses;
+
+        if(includeReviews)
+        {
+            baseQuery = baseQuery.Include(c => c.Reviews);
+        }
+
+        return baseQuery;
+    }
+
+    public async Task<Course?> GetCourseByIdAsync(int id, bool includeReviews = false)
+    {
+        return await GetBaseQuery(includeReviews).FirstOrDefaultAsync(c => c.Id == id);
     }
     
     public async Task<Course> AddCourseAsync(Course course)

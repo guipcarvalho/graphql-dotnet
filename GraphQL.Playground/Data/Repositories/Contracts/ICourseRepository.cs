@@ -4,9 +4,9 @@ namespace GraphQL.Playground.Data.Repositories.Contracts;
 
 public interface ICourseRepository
 {
-    Task<IEnumerable<Course>> GetCoursesAsync();
+    Task<IEnumerable<Course>> GetCoursesAsync(bool includeReviews = false);
     
-    Task<Course?> GetCourseByIdAsync(int id);
+    Task<Course?> GetCourseByIdAsync(int id, bool includeReviews = false);
     Task<Course> AddCourseAsync(Course course);
     
     Task<Course> UpdateCourseAsync(Course course);

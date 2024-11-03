@@ -11,11 +11,10 @@ public sealed class CourseQuery : ObjectGraphType
     {
         Field<ListGraphType<CourseType>>("courses")
             .Description("Returns a list of courses.")
-            .ResolveAsync(async _ => await repository.GetCoursesAsync());
+            .ResolveAsync(async context => await repository.GetCoursesAsync(context.SubFields!.ContainsKey("reviews")));
         
         Field<CourseType>("course")
             .Argument<NonNullGraphType<IdGraphType>>("id", "The id of the course.")
-            .ResolveAsync(async context => await repository.GetCourseByIdAsync(context.GetArgument<int>("id")));
-            
+            .ResolveAsync(async context => await repository.GetCourseByIdAsync(context.GetArgument<int>("id"), context.SubFields!.ContainsKey("reviews")));
     }
 }
